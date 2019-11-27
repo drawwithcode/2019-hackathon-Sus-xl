@@ -2,7 +2,7 @@
 var img
 function preload(){
    sound = loadSound('assets/TG1_bumper.mp3');
-   img = loadImage('assets/head.png');
+   img = loadImage('assets/speaker.png');
 }
 
 function setup(){
@@ -11,12 +11,19 @@ function setup(){
   //press to play
   canvas.mouseClicked(play);
 
+  analyzer = new p5.Amplitude();
+
+
   fft = new p5.FFT(0.95,256);
   sound.amp(0.5);
 }
 
 function draw(){
   background('blue');
+  volume = analyzer.getLevel();
+  volume1 = map(volume, 0.5, 1.5, 0.5, height);
+  imageMode(CENTER);
+  image(img, width/2, height/2, volume1, volume1);
 
   var spectrum = fft.analyze();
   noStroke();
@@ -28,12 +35,6 @@ function draw(){
   }
 
 
-  // var image = fft.analyze();
-  //   noStroke();
-  //   fill(0,255,0); // spectrum is green
-  //     volume = analyzer.getLevel();
-  //     volume = map(volume, 0, 1, 0, height);
-  //     image (img, width/2, height/2, volume);
 
 
   text('press to play', windowWidth / 2, windowHeight - 60);
